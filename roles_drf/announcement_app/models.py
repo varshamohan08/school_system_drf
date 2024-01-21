@@ -20,13 +20,3 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.title
-{
-    "title" : "Important Announcement for February",
-    "content" : "<html><body><div><p>Dear Students,</p><p>We have an important announcement for the month of February. There will be some changes in the schedule, and additional classes may be scheduled on certain days. Please stay tuned for further updates.</p><p>Your cooperation is highly appreciated. If you have any questions, feel free to reach out.</p><p>Thank you.</p><p>Best Regards,<br></p></div></body></html>",
-    "expiration_date" : "2024-02-15"
-}
-
-{
-    "id" : "1",
-    "status": "Approved"
-}
