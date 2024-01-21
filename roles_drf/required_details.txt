@@ -1,0 +1,44 @@
+Admin User
+----------
+
+User name: Admin1
+Password: test@123
+
+Staff User
+----------
+
+User name: Staff1
+Password: test@123
+
+Student User
+----------
+
+User name: Student1
+Password: test@123
+
+Editor User
+----------
+
+User name: Editor1
+Password: test@123
+
+URL for registration form with port 8000:
+-----------------------------------------
+http://127.0.0.1:8000/reg_form
+
+URL for login page with port 8000:
+-----------------------------------------
+http://127.0.0.1:8000/login
+
+Note:
+-----
+ - Admin user has permission to view the user list and announcement list
+ - Through the announcement list admin can approve or reject the announcements created by the Editor
+
+ - The editor user has permission to view the announcement list and has the access page to create new announcements (the Editor has the privilege to create a new announcement)
+
+ - Staff user has permission to view the announcement list, assignment list, answers list(it shows the answers corresponding to the assignment created by the staff who is logged in), and page to create a new assignment
+ - Staff can add the marks and remarks of each answer via the answers list
+
+ - Student user has permission to view the announcement list, assignment list, and answers list(it shows the answers created by logged student)
+ - Staff can add the answer to each assignment via the assignment list. After the staff evaluates (add the marks) the answer the student can not change his/her answer.
