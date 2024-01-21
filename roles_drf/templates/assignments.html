@@ -1,0 +1,91 @@
+
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+
+    <h1>Assignments</h1>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                {% for assignment in assignments %}
+                <div class="card mb-4">
+                    <div class="card-header  bg-primary text-white">
+                        <p class="header">{{assignment.title}}</p>
+                    </div>
+                    <div class="card-body">
+                        {{ assignment.description | safe }}<br>
+
+                        <div class="mt-2">
+                            <span style="font-style: italic;
+                            color: blue;">Created by: </span>{{assignment.created_by.username}}<br>
+                            <span style="font-style: italic;
+                            color: blue;">Created Date: </span><span style="color:#858585">{{assignment.created_at}}</span>
+                        </div>
+                    </div>
+                    {% if role == "Student" %}
+                        <p style="color: red;
+                        text-align: center;
+                        font-style: italic;">
+                            <button type="submit" class="btn btn-primary" onclick="submitAssignment('{{assignment.id}}')">Submit</button>&nbsp;
+                        </p>
+                    {% else %}
+                        {% if role == "Admin" or role == "Editor" %}
+                            {% if assignment.status == "Approved" %}
+                                <p class="ml-3" style="font-weight: bold;
+                                color: green;
+                                margin-top: -2%;">{{assignment.status}}</p>
+                            {% else %}
+                                <p class="ml-3" style="font-weight: bold;
+                                color: slategrey;
+                                margin-top: -2%;">{{assignment.status}}</p>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (localStorage.getItem('userRole')) {
+            }
+            else{
+                var role = '{{ role }}';
+                var username = '{{ username }}';
+                localStorage.setItem('userRole', role);
+                localStorage.setItem('userName', username);
+                window.location.reload()
+            }
+        });
+    </script>
+    <script>
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+        function submitAssignment(assignmentId) {
+            localStorage.setItem('assignment_id', assignmentId)
+            var additionalData = {
+                id: assignmentId,
+            };
+    
+            $.ajax({
+                url: `/assignment/add_answer?id=` + assignmentId,
+                type: 'GET', 
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                success: function(response) {
+                    // var assignmentId = response.assignment_id;
+                    window.location.href = `/assignment/add_answer?id=` + assignmentId;
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+    </script>
+    
+{% endblock %}

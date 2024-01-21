@@ -1,0 +1,91 @@
+
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+
+    <h1>Announcements</h1>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                {% for announcement in announcements %}
+                <div class="card mb-4">
+                    <div class="card-header  bg-primary text-white">
+                        <p class="header">{{announcement.title}}</p>
+                    </div>
+                    <div class="card-body">
+                        {{ announcement.content | safe }}
+
+                        <div class="mt-2">
+                            <span style="font-style: italic;
+                            color: blue;">Created by: </span>{{announcement.created_by.username}}<br>
+                            <span style="font-style: italic;
+                            color: blue;">Created Date: </span><span>{{announcement.created_at}}</span>
+                        </div>
+                    </div>
+                    {% if role == "Admin" and announcement.status == "Pending" %}
+                        <p style="color: red;
+                        text-align: center;
+                        font-style: italic;">
+                            <button type="submit" class="btn btn-primary" onclick="approveAnnouncement('{{announcement.id}}', 'Approved')">Approve</button>&nbsp;
+                            <button type="submit" class="btn btn-primary" onclick="approveAnnouncement('{{announcement.id}}', 'Rejected')">Reject</button>
+                        </p>
+                    {% else %}
+                        {% if role == "Admin" or role == "Editor" %}
+                            {% if announcement.status == "Approved" %}
+                                <p class="ml-3" style="font-weight: bold;
+                                color: green;
+                                margin-top: -2%;">{{announcement.status}}</p>
+                            {% else %}
+                                <p class="ml-3" style="font-weight: bold;
+                                color: slategrey;
+                                margin-top: -2%;">{{announcement.status}}</p>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (localStorage.getItem('userRole')) {
+            }
+            else{
+                var role = '{{ role }}';
+                var username = '{{ username }}';
+                localStorage.setItem('userRole', role);
+                localStorage.setItem('userName', username);
+                window.location.reload()
+            }
+        });
+    </script>
+    <script>
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+        function approveAnnouncement(announcementId, announcementstatus) {
+            var additionalData = {
+                id: announcementId,
+                status: announcementstatus,
+            };
+    
+            $.ajax({
+                url: `/announcement/announce`,
+                type: 'PUT', 
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                data: additionalData,
+                success: function(response) {
+                    window.location.reload()
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+    </script>
+{% endblock %}

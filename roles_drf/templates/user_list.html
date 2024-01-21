@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+<style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+</style>
+<h1>User List</h1>
+<div class="container mt-5">
+    <table>
+        <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>phone</th>
+        <th>Role</th>
+        <th>Country</th>
+        <th>Nationality</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+        <td>{{user.name}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.mobile}}</td>
+        <td>{{user.role}}</td>
+        <td>{{user.country}}</td>
+        <td>{{user.nationality}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

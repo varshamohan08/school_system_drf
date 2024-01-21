@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover {
+            background-color: #111;
+        }
+
+        .logout-link {
+            margin-left: auto;
+        }
+        .card {
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+
+        }
+        /* .card-header {
+            background-color: #0d6efd !important;
+            color: white;
+        } */
+        .header {
+            font-weight: bold;
+            font-size: larger;
+            margin: 0;
+        }
+        .note-editor.note-airframe, .note-editor.note-frame {
+            /* border: 1px solid #00000032; */
+            width: 100% !important;
+        }
+    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<ul>
+    <li><a class="active" href="{% url 'announcement_app:announce' %}">Announcements</a></li>
+    {% if role == "Admin" %}
+        <li><a class="" href="{% url 'user_app:user_list' %}">User List</a></li>
+    {% endif %}
+    {% if role == "Editor" %}
+        <li><a class="" href="{% url 'announcement_app:add_announcement' %}">Add Announcement</a></li>
+    {% endif %}
+    {% if role == "Student" or role == "Staff" %}
+        <li><a class="" href="{% url 'assignment_app:assignment' %}">Assignments</a></li>
+        <li><a class="" href="{% url 'assignment_app:answer' %}">Answers</a></li>
+    {% endif %}
+    {% if role == "Staff" %}
+        <li><a class="" href="{% url 'assignment_app:add_assignment' %}">Add Assignments</a></li>
+    {% endif %}
+    <li class="logout-link" style="float: right;"><a class="active" onclick="logoutAndClearLocalStorage()" href="{% url 'user_app:logout' %}">Logout</a></li>
+    <li style="float: right;"><a>{{userName}}</a></li>
+</ul>
+
+<div class="container mt-3">
+    {% block content %}{% endblock %}
+</div>
+
+<script>
+    var userName;
+    var role;
+    document.addEventListener('DOMContentLoaded', function () {
+        if (localStorage.getItem('userRole')) {
+            role = localStorage.getItem('userRole')
+            userName = localStorage.getItem('userName')
+        }
+    });
+</script>
+<script>
+    function logoutAndClearLocalStorage() {
+        localStorage.clear();
+        window.location.href = "{% url 'user_app:logout' %}";
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+</body>
+</html>
